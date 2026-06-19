@@ -1,0 +1,29 @@
+# SeaHorse v3.0.0 - Python Requirements
+# Core Requirements
+cryptography>=41.0.0
+colorama>=0.4.6
+requests>=2.31.0
+psutil>=5.9.5
+
+# Network & Security
+paramiko>=3.3.1
+scapy>=2.5.0
+python-whois>=0.8.0
+qrcode>=7.4.2
+pyshorteners>=1.0.1
+
+# Web Framework
+Flask>=2.3.0
+
+# Platform Bots
+discord.py>=2.3.0
+telethon>=1.34.0
+slack-sdk>=3.21.0
+
+# WhatsApp Web Automation
+selenium>=4.15.0
+webdriver-manager>=4.0.0
+
+# Additional Utilities
+dnspython>=2.4.0
+pyOpenSSL>=23.2.0

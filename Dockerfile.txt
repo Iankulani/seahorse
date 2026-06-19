@@ -1,0 +1,85 @@
+# SeaHorse v3.0.0 - Dockerfile
+# Runs SeaHorse in an Ubuntu container
+
+FROM ubuntu:22.04
+
+LABEL maintainer="SeaHorse Team"
+LABEL version="3.0.0"
+LABEL description="SeaHorse - Multi-Platform Command Center & Phishing Suite"
+
+# Prevent interactive prompts during installation
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=UTC
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-dev \
+    build-essential \
+    git \
+    wget \
+    curl \
+    nmap \
+    nikto \
+    dnsutils \
+    traceroute \
+    openssh-client \
+    chromium-browser \
+    chromium-chromedriver \
+    iptables \
+    net-tools \
+    iputils-ping \
+    netcat \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set up Python aliases
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
+# Create SeaHorse user
+RUN useradd -m -s /bin/bash seahorse
+USER seahorse
+WORKDIR /home/seahorse
+
+# Create SeaHorse directories
+RUN mkdir -p .seahorse/{payloads,workspaces,scans,reports,phishing_pages,wordlists,ssh_keys,web_ui} \
+    && mkdir -p .seahorse/{traffic_logs,captured_credentials,phishing_templates,custom_phishing,webhooks} \
+    && mkdir -p .seahorse/{nikto_results,time_history,ssh_logs,whatsapp_session,signal_session}
+
+# Copy requirements and install Python packages
+COPY requirements.txt /tmp/requirements.txt
+RUN python3 -m pip install --upgrade pip \
+    && python3 -m pip install -r /tmp/requirements.txt
+
+# Copy SeaHorse source
+COPY seahorse.py /home/seahorse/
+COPY requirements_check.py /home/seahorse/
+COPY install.sh /home/seahorse/
+
+# Make scripts executable
+RUN chmod +x /home/seahorse/seahorse.py \
+    /home/seahorse/requirements_check.py \
+    /home/seahorse/install.sh
+
+# Expose ports
+EXPOSE 8080 8081 8082
+
+# Create entrypoint script
+RUN echo '#!/bin/bash\n\
+echo "🐴 SeaHorse v3.0.0 - Docker Container"\n\
+echo "========================================"\n\
+echo "Web Interface: http://localhost:8080"\n\
+echo "Type 'help' for available commands"\n\
+echo ""\n\
+python3 /home/seahorse/seahorse.py' > /home/seahorse/entrypoint.sh \
+    && chmod +x /home/seahorse/entrypoint.sh
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD python3 -c "import socket; socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(('localhost', 8080))" || exit 1
+
+# Run SeaHorse
+ENTRYPOINT ["/home/seahorse/entrypoint.sh"]
+
+# Default command
+CMD []

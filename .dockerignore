@@ -1,0 +1,65 @@
+# Docker ignore file for SeaHorse
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# SeaHorse data
+.seahorse/
+*.db
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Sensitive files
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+config.json
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Large files
+*.pcap
+*.pcapng
+*.iso
+*.dmg
+*.zip
+*.tar.gz
+*.7z
+
+# Reports and logs
+reports/
+logs/
+*.log
+
+# Testing
+tests/
+test_*.py
+*_test.py

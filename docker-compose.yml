@@ -1,0 +1,66 @@
+# SeaHorse v3.0.0 - Docker Compose Configuration
+
+version: '3.8'
+
+services:
+  seahorse:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: seahorse
+    hostname: seahorse
+    image: seahorse:latest
+    
+    # Port mapping
+    ports:
+      - "8080:8080"    # Web UI
+      - "8081:8081"    # Additional phishing port
+      - "8082:8082"    # Additional phishing port
+    
+    # Volumes for persistent data
+    volumes:
+      - ./seahorse_data:/home/seahorse/.seahorse
+      - ./phishing_pages:/home/seahorse/.seahorse/phishing_pages
+      - ./captured_credentials:/home/seahorse/.seahorse/captured_credentials
+      - ./wordlists:/home/seahorse/.seahorse/wordlists
+      - ./reports:/home/seahorse/.seahorse/reports
+      - ./ssh_keys:/home/seahorse/.seahorse/ssh_keys
+    
+    # Environment variables
+    environment:
+      - TZ=UTC
+      - PYTHONUNBUFFERED=1
+      - SEAHORSE_CONFIG=/home/seahorse/.seahorse/config.json
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Network settings
+    networks:
+      - seahorse_network
+    
+    # Security settings
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import socket; socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(('localhost', 8080))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  seahorse_network:
+    driver: bridge
+
+volumes:
+  seahorse_data:
+  phishing_pages:
+  captured_credentials:
+  wordlists:
+  reports:
+  ssh_keys:
