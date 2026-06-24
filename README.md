@@ -1,8 +1,5 @@
 # Seahorse
 
-**Seahorse: A Unified Command-Driven Cyber Security Orchestration Platform**
-
-**Overview**
 
 Seahorse is an advanced, multi-channel cyber security orchestration and command execution platform designed to empower organizations, educators, and cyber professionals with a centralized, flexible, and intelligent system for managing cyber operations. Built for modern digital environments, Seahorse integrates seamlessly with widely used communication platforms such as Discord, Slack, Telegram, iMessage, Signal, WhatsApp, and web-based applications, enabling users to issue commands, run simulations, conduct tests, and perform training exercises from virtually anywhere.
 
