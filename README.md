@@ -204,4 +204,6 @@ python seahorse.py
 
 # Star History
 
+[![Star History Chart](https://api.star-history.com/svg?repos=Iankulani/seahorse&type=Date)](https://star-history.com/#Iankulani/seahorse&Date)
+
   
